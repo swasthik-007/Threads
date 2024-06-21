@@ -49,7 +49,7 @@ const signupUser = async (req, res) => {
     const user = await User.findOne({ $or: [{ email }, { username }] });
 
     if (user) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({ error: "User already exists" });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -72,10 +72,10 @@ const signupUser = async (req, res) => {
         username: newUser.username,
       });
     } else {
-      res.status(400).json({ message: "invalid user data" });
+      res.status(400).json({ error: "invalid user data" });
     }
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ error: err.message });
     console.log("error in signupUser:", err.message);
   }
 };
@@ -90,7 +90,7 @@ const loginUser = async (req, res) => {
     );
 
     if (!user || !isPasswordCorrect)
-      return res.status(400).json({ message: "Invalid Username or password" });
+      return res.status(400).json({ error: "Invalid Username or password" });
 
     generateTokenAndSetCookie(user._id, res);
 
@@ -101,7 +101,7 @@ const loginUser = async (req, res) => {
       username: user.username,
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ error: err.message });
     console.log("error in loginUser:", err.message);
   }
 };
@@ -110,7 +110,7 @@ const logoutUser = async (req, res) => {
     res.cookie("jwt", { maxAge: 1 });
     res.status(200).json({ message: "User logged out successfuly" });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ error: err.message });
     console.log("error in loginUser:", err.message);
   }
 };
@@ -125,7 +125,7 @@ const followUnfollowUser = async (req, res) => {
         .json({ message: "You Cannot follow/Unfollow Yourself" });
 
     if (!userToModify || !currentUser)
-      return res.status(400).json({ message: "User not Found" });
+      return res.status(400).json({ error: "User not Found" });
     const isFollowing = currentUser.following.includes(id);
 
     if (isFollowing) {
@@ -142,7 +142,7 @@ const followUnfollowUser = async (req, res) => {
       res.status(200).json({ message: "user followed successffully" });
     }
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ error: err.message });
     console.log("error in followUnfollowUser:", err.message);
   }
 };
