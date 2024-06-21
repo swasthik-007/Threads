@@ -2,6 +2,7 @@ import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import generateTokenAndSetCookie from "../utils/helpers/generateTokenAndSetCookie.js";
 // import mongoose from "mongoose";
+import { v2 as cloudinary } from "cloudinary";
 
 const getUserProfile = async (req, res) => {
   // We will fetch user profile either with username or userId
@@ -70,6 +71,8 @@ const signupUser = async (req, res) => {
         name: newUser.name,
         email: newUser.email,
         username: newUser.username,
+        bio: newUser.bio,
+        profilePic: newUser.profilePic,
       });
     } else {
       res.status(400).json({ error: "invalid user data" });
@@ -79,7 +82,6 @@ const signupUser = async (req, res) => {
     console.log("error in signupUser:", err.message);
   }
 };
-
 const loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -99,6 +101,8 @@ const loginUser = async (req, res) => {
       name: user.name,
       email: user.email,
       username: user.username,
+      bio: User.bio,
+      profilePic: User.profilePic,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -166,16 +170,16 @@ const updateUser = async (req, res) => {
       user.password = hashedPassword;
     }
 
-    // if (profilePic) {
-    //   if (user.profilePic) {
-    //     await cloudinary.uploader.destroy(
-    //       user.profilePic.split("/").pop().split(".")[0]
-    //     );
-    //   }
+    if (profilePic) {
+      if (user.profilePic) {
+        await cloudinary.uploader.destroy(
+          user.profilePic.split("/").pop().split(".")[0]
+        );
+      }
 
-    //   const uploadedResponse = await cloudinary.uploader.upload(profilePic);
-    //   profilePic = uploadedResponse.secure_url;
-    // }
+      const uploadedResponse = await cloudinary.uploader.upload(profilePic);
+      profilePic = uploadedResponse.secure_url;
+    }
 
     user.name = name || user.name;
     user.email = email || user.email;
@@ -197,8 +201,8 @@ const updateUser = async (req, res) => {
     //   { arrayFilters: [{ "reply.userId": userId }] }
     // );
 
-    // // password should be null in response
-    // user.password = null;
+    // password should be null in response
+    user.password = null;
 
     res.status(200).json({ message: "profile Updated successfully", user });
   } catch (err) {
