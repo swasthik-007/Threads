@@ -5,7 +5,7 @@ import { AiFillHome } from "react-icons/ai";
 import { RxAvatar } from "react-icons/rx";
 import { Link as RouterLink } from "react-router-dom";
 import { FiLogOut } from "react-icons/fi";
-// import useLogout from "../hooks/useLogout";
+import useLogout from "../hooks/useLogout";
 import authScreenAtom from "../atoms/authAtom";
 import { BsFillChatQuoteFill } from "react-icons/bs";
 import { MdOutlineSettings } from "react-icons/md";
@@ -13,7 +13,7 @@ import { MdOutlineSettings } from "react-icons/md";
 const Header = () => {
     const { colorMode, toggleColorMode } = useColorMode();
     const user = useRecoilValue(userAtom);
-    // const logout = useLogout();
+    const logout = useLogout();
     const setAuthScreen = useSetRecoilState(authScreenAtom);
 
     return (
@@ -48,7 +48,7 @@ const Header = () => {
                     <Link as={RouterLink} to={`/settings`}>
                         <MdOutlineSettings size={20} />
                     </Link>
-                    <Button size={"xs"} >
+                    <Button size={"xs"} onClick={logout}>
                         <FiLogOut size={20} />
                     </Button>
                 </Flex>

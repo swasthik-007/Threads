@@ -26,6 +26,7 @@ import userAtom from "../atoms/userAtom";
 import useShowToast from "../hooks/useShowToast";
 import postsAtom from "../atoms/postsAtom";
 import { useParams } from "react-router-dom";
+
 const MAX_CHAR = 500;
 
 const CreatePost = () => {
@@ -146,7 +147,7 @@ const CreatePost = () => {
                 </ModalContent>
             </Modal>
         </>
-    )
-}
+    );
+};
 
-export default CreatePost
+export default CreatePost;
