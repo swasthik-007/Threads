@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import UserHeader from "../components/UserHeader";
 import { useParams } from "react-router-dom";
 import useShowToast from "../hooks/useShowToast";
+import { Flex, Spinner } from "@chakra-ui/react";
 // import { Flex, Spinner } from "@chakra-ui/react";
 // import Post from "../components/Post";
 // import useGetUserProfile from "../hooks/useGetUserProfile";
@@ -15,6 +16,7 @@ const UserPage = () => {
     const showToast = useShowToast();
     // const [posts, setPosts] = useRecoilState(postsAtom);
     // const [fetchingPosts, setFetchingPosts] = useState(true);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const getUser = async () => {
@@ -32,10 +34,20 @@ const UserPage = () => {
             } catch (error) {
                 showToast("Error", error.message, "error");
             }
+            finally {
+                setLoading(false);
+            }
         };
 
         getUser();
     }, [username, showToast]);
+    if (!user && loading) {
+        return (
+            <Flex justifyContent={"center"}>
+                <Spinner size={"xl"} />
+            </Flex>
+        );
+    }
     if (!user) return null;
 
     return (
