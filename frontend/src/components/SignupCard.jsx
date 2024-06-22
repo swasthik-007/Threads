@@ -19,7 +19,6 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useSetRecoilState } from "recoil";
 import authScreenAtom from "../atoms/authAtom";
 import useShowToast from "../hooks/useShowToast";
-// import useShowToast from "../hooks/useShowToast";
 import userAtom from "../atoms/userAtom";
 
 export default function SignupCard() {
@@ -32,7 +31,6 @@ export default function SignupCard() {
         password: "",
     });
 
-    // const toast = useToast();
     const showToast = useShowToast();
     const setUser = useSetRecoilState(userAtom);
 
@@ -49,13 +47,6 @@ export default function SignupCard() {
 
             if (data.error) {
                 showToast("Error", data.error, "error");
-                // toast({
-                //     title: "Error",
-                //     description: "data.error",
-                //     status: "error",
-                //     duration: 3000,
-                //     isClosable: true,
-                // })
                 return;
             }
 
@@ -63,7 +54,6 @@ export default function SignupCard() {
             setUser(data);
         } catch (error) {
             showToast("Error", error, "error");
-            console.log(error)
         }
     };
 
@@ -142,7 +132,7 @@ export default function SignupCard() {
                         <Stack pt={6}>
                             <Text align={"center"}>
                                 Already a user?{" "}
-                                <Link color={"blue.400"} onClick={() => setAuthScreen("login")} >
+                                <Link color={"blue.400"} onClick={() => setAuthScreen("login")}>
                                     Login
                                 </Link>
                             </Text>

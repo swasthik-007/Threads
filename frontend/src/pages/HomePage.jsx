@@ -1,11 +1,10 @@
 import { Box, Flex, Spinner } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import useShowToast from "../hooks/useShowToast";
-// import Post from "../components/Post";
-import Post from "../components/Post"
+import Post from "../components/Post";
 import { useRecoilState } from "recoil";
 import postsAtom from "../atoms/postsAtom";
-// import SuggestedUsers from "../components/SuggestedUsers";
+import SuggestedUsers from "../components/SuggestedUsers";
 
 const HomePage = () => {
     const [posts, setPosts] = useRecoilState(postsAtom);
@@ -55,7 +54,7 @@ const HomePage = () => {
                     md: "block",
                 }}
             >
-                {/* <SuggestedUsers /> */}
+                <SuggestedUsers />
             </Box>
         </Flex>
     );

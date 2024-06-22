@@ -1,17 +1,19 @@
-import User from "../models/userModel.js";
 import Post from "../models/postModel.js";
+import User from "../models/userModel.js";
 import { v2 as cloudinary } from "cloudinary";
+
 const createPost = async (req, res) => {
   try {
     const { postedBy, text } = req.body;
     let { img } = req.body;
+
     if (!postedBy || !text) {
       return res
         .status(400)
-        .json({ message: "postedBy and textfields are required" });
+        .json({ error: "Postedby and text fields are required" });
     }
-    const user = await User.findById(postedBy);
 
+    const user = await User.findById(postedBy);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -26,17 +28,22 @@ const createPost = async (req, res) => {
         .status(400)
         .json({ error: `Text must be less than ${maxLength} characters` });
     }
+
     if (img) {
       const uploadedResponse = await cloudinary.uploader.upload(img);
       img = uploadedResponse.secure_url;
     }
+
     const newPost = new Post({ postedBy, text, img });
     await newPost.save();
+
     res.status(201).json(newPost);
   } catch (err) {
     res.status(500).json({ error: err.message });
+    console.log(err);
   }
 };
+
 const getPost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -50,6 +57,7 @@ const getPost = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
 const deletePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -73,6 +81,7 @@ const deletePost = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
 const likeUnlikePost = async (req, res) => {
   try {
     const { id: postId } = req.params;
@@ -100,6 +109,7 @@ const likeUnlikePost = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
 const replyToPost = async (req, res) => {
   try {
     const { text } = req.body;
@@ -127,6 +137,7 @@ const replyToPost = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
 const getFeedPosts = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -146,6 +157,7 @@ const getFeedPosts = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
 const getUserPosts = async (req, res) => {
   const { username } = req.params;
   try {
@@ -163,6 +175,7 @@ const getUserPosts = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 export {
   createPost,
   getPost,
