@@ -15,7 +15,7 @@ export const SocketContextProvider = ({ children }) => {
     const user = useRecoilValue(userAtom);
 
     useEffect(() => {
-        const socket = io("https://threads1.onrender.com/", {
+        const socket = io("https://threads1.onrender.com", {
             query: {
                 userId: user?._id,
             },
