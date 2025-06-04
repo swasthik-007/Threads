@@ -5,8 +5,10 @@ import useShowToast from "../hooks/useShowToast";
 import { Flex, Spinner } from "@chakra-ui/react";
 import Post from "../components/Post";
 import useGetUserProfile from "../hooks/useGetUserProfile";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import postsAtom from "../atoms/postsAtom";
+import userAtom from "../atoms/userAtom";
+import AiChatBox from "../components/AiChatBox";
 
 const UserPage = () => {
     const { user, loading } = useGetUserProfile();
@@ -14,6 +16,7 @@ const UserPage = () => {
     const showToast = useShowToast();
     const [posts, setPosts] = useRecoilState(postsAtom);
     const [fetchingPosts, setFetchingPosts] = useState(true);
+    const currentUser = useRecoilValue(userAtom);
 
     useEffect(() => {
         const getPosts = async () => {
@@ -54,11 +57,10 @@ const UserPage = () => {
                 <Flex justifyContent={"center"} my={12}>
                     <Spinner size={"xl"} />
                 </Flex>
-            )}
-
-            {posts.map((post) => (
+            )}            {posts.map((post) => (
                 <Post key={post._id} post={post} postedBy={post.postedBy} />
             ))}
+            {currentUser && <AiChatBox />}
         </>
     );
 };
