@@ -16,7 +16,10 @@ dotenv.config();
 connectDB();
 job.start();
 const PORT = process.env.PORT || 5000;
-const __dirname = path.resolve();
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -37,11 +40,10 @@ app.use("/api/ai", aiRoutes);
 // http://localhost:5000 => backend,frontend
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "/frontend/dist")));
-
-  // react app
+  const frontendPath = path.resolve(__dirname, "frontend", "dist");
+  app.use(express.static(frontendPath));
   app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+    res.sendFile(path.join(frontendPath, "index.html"));
   });
 }
 
