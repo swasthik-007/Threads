@@ -10,13 +10,15 @@ import aiRoutes from "./routes/aiRoutes.js";
 import { v2 as cloudinary } from "cloudinary";
 import { app, server } from "./socket/socket.js";
 import job from "./cron/cron.js";
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 
 connectDB();
 job.start();
 const PORT = process.env.PORT || 5000;
-import { fileURLToPath } from "url";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -40,8 +42,9 @@ app.use("/api/ai", aiRoutes);
 // http://localhost:5000 => backend,frontend
 
 if (process.env.NODE_ENV === "production") {
-  const frontendPath = path.resolve(__dirname, "frontend", "dist");
+  const frontendPath = path.resolve(__dirname, "../frontend/dist");
   app.use(express.static(frontendPath));
+
   app.get("*", (req, res) => {
     res.sendFile(path.join(frontendPath, "index.html"));
   });
