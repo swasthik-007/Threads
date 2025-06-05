@@ -1,11 +1,13 @@
 import { Box, Flex, Spinner } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import useShowToast from "../hooks/useShowToast";
 import Post from "../components/Post";
 import { useRecoilState } from "recoil";
 import postsAtom from "../atoms/postsAtom";
 import SuggestedUsers from "../components/SuggestedUsers";
 import AiChatBox from "../components/AiChatBox";
+import CreatePost from "../components/CreatePost";
 
 const HomePage = () => {
     const [posts, setPosts] = useRecoilState(postsAtom);
@@ -41,10 +43,19 @@ const HomePage = () => {
                         <Flex justify='center'>
                             <Spinner size='xl' />
                         </Flex>
-                    )}
-
-                    {posts.map((post) => (
-                        <Post key={post._id} post={post} postedBy={post.postedBy} />
+                    )}                    {posts.map((post, index) => (
+                        <motion.div
+                            key={post._id}
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{
+                                duration: 0.4,
+                                delay: index * 0.1,
+                                ease: [0.4, 0, 0.2, 1]
+                            }}
+                        >
+                            <Post post={post} postedBy={post.postedBy} />
+                        </motion.div>
                     ))}
                 </Box>
                 <Box
@@ -54,9 +65,9 @@ const HomePage = () => {
                         md: "block",
                     }}
                 >
-                    <SuggestedUsers />
-                </Box>
+                    <SuggestedUsers />                </Box>
             </Flex>
+            <CreatePost />
             <AiChatBox />
         </>
     );

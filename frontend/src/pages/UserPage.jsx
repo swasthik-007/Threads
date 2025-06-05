@@ -9,6 +9,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import postsAtom from "../atoms/postsAtom";
 import userAtom from "../atoms/userAtom";
 import AiChatBox from "../components/AiChatBox";
+import CreatePost from "../components/CreatePost";
 
 const UserPage = () => {
     const { user, loading } = useGetUserProfile();
@@ -60,6 +61,7 @@ const UserPage = () => {
             )}            {posts.map((post) => (
                 <Post key={post._id} post={post} postedBy={post.postedBy} />
             ))}
+            {currentUser && currentUser.username === user.username && <CreatePost />}
             {currentUser && <AiChatBox />}
         </>
     );
